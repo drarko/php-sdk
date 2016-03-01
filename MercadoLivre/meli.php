@@ -1,4 +1,5 @@
 <?php
+namespace MercadoLibre;
 
 class Meli {
 
@@ -12,7 +13,7 @@ class Meli {
      * @var $AUTH_URL is a url to redirect the user for login.
      */
     protected static $API_ROOT_URL = "https://api.mercadolibre.com";
-    protected static $AUTH_URL     = "http://auth.mercadolivre.com.br/authorization";
+    protected static $AUTH_URL     = "http://auth.mercadolibre.com.ar/authorization";
     protected static $OAUTH_URL    = "/oauth/token";
 
     /**
@@ -241,6 +242,9 @@ class Meli {
      * @return mixed
      */
     public function execute($path, $opts = array(), $params = array()) {
+		if(($this->access_token != null) && (!in_array("access_token",$params))) {
+			$params['access_token'] = $this->access_token;
+		}
         $uri = $this->make_path($path, $params);
 
         $ch = curl_init($uri);
