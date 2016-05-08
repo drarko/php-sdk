@@ -123,7 +123,7 @@ class Meli {
                 CURLOPT_POSTFIELDS => $body
             );
         
-            $request = $this->execute(self::$OAUTH_URL, $opts);
+            $request = $this->execute(self::$OAUTH_URL, $opts,array(),true);
 
             if($request["httpCode"] == 200) {             
                 $this->access_token = $request["body"]->access_token;
@@ -152,7 +152,7 @@ class Meli {
      * @param array $params
      * @return mixed
      */
-    public function get($path, $params = null) {
+    public function get($path, $params = array() ) {
         $exec = $this->execute($path, null, $params);
 
         return $exec;
@@ -241,8 +241,8 @@ class Meli {
      * @param array $params
      * @return mixed
      */
-    public function execute($path, $opts = array(), $params = array()) {
-		if(($this->access_token != null) && (!in_array("access_token",$params))) {
+    public function execute($path, $opts = array(), $params = array(),$exclude = false) {
+		if((!$exclude)&&($this->access_token != null) && (!in_array("access_token",$params))) {
 			$params['access_token'] = $this->access_token;
 		}
         $uri = $this->make_path($path, $params);
